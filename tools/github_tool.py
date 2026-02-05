@@ -1,6 +1,6 @@
 import os
-import requests
 import time
+import requests
 
 def search_github(query: str, limit: int = 3, retries: int = 2):
     headers = {
@@ -12,7 +12,10 @@ def search_github(query: str, limit: int = 3, retries: int = 2):
             response = requests.get(
                 "https://api.github.com/search/repositories",
                 headers=headers,
-                params={"q": query, "sort": "stars"}
+                params={
+                    "q": query, 
+                    "sort": "stars"
+                }
             )
             response.raise_for_status()
             data = response.json()

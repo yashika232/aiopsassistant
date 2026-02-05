@@ -1,18 +1,17 @@
 import os
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-1.5-flash")
+# The modern client defaults to the stable v1 API
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def call_llm(system_prompt: str, user_prompt: str) -> str:
-    prompt = f"""
-{system_prompt}
-
-User Input:
-{user_prompt}
-"""
-    response = model.generate_content(prompt)
+    # 'gemini-1.5-flash' is fully supported here
+    response = client.models.generate_content(
+        model="gemini-flash-latest",
+        contents=user_prompt,
+        config={'system_instruction': system_prompt}
+    )
     return response.text.strip()
